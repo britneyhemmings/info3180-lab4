@@ -92,7 +92,8 @@ def get_uploaded_images():
     
     for subdir, dirs, files in os.walk(rootdir + '/uploads'):
         for file in files:
-            images.append(file)
+            if file.endswith(('jpg', 'jpeg', 'png',)):
+                images.append(file)
     return images
 
 @app.route('/uploads/<filename>')
@@ -100,6 +101,7 @@ def get_image(filename):
     return send_from_directory(os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER']), filename)
 
 @app.route('/files')
+@login_required
 def files():
     images = get_uploaded_images()
     return render_template("files.html", images=images)
